@@ -29,12 +29,8 @@ public class Vote {
         return name;
     }
 
-    public String getPartyName() {
-        return party.getPartyName();
-    }
-
-    public String getShortName() {
-        return party.getShortName();
+    public Party getParty() {
+        return party;
     }
 
 }

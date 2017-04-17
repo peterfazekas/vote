@@ -31,5 +31,6 @@ public class App {
         System.out.print("3. feladat: Kérem adjon meg egy jelölt nevet: ");
         System.out.println(vote.getNumberOfVotesByCandidateName(console.readName()));
         System.out.println("4. feladat: " + vote.getTotalNumberOfVoters());
+        System.out.println("5. feladat: A pártokra leadott szavazatok aránya:" + vote.getPartyStatistic());
     }
 }

@@ -1,9 +1,12 @@
 package hu.vote.service;
 
+import hu.vote.model.Party;
 import hu.vote.model.Vote;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 /**
  * @author Peter_Fazekas on 2017.04.17..
@@ -66,8 +69,35 @@ public class VoteService {
     }
 
     /**
-     *
+     * 5. feladat: Határozza meg és írassa ki a képernyőre az egyes pártokra leadott szavazatok arányát
+     * az összes leadott szavazathoz képest két tizedesjegy pontossággal! A független jelölteket együtt,
+     * „Független jelöltek” néven szerepeltesse!
+     * @return - A megfelelő válasz. pl.: Zöldségevők Pártja= 12,34%
      */
+    public String getPartyStatistic() {
+        Map<Party, Integer> partyMap = createPartyStatistic();
+        StringBuilder sb = new StringBuilder();
+        partyMap.entrySet()
+                .stream()
+                .map(this::printPartyStatistic)
+                .forEach(sb::append);
+        return sb.toString();
+    }
 
+    private Map<Party, Integer> createPartyStatistic() {
+        Map<Party, Integer> partyMap = new TreeMap<>();
+        votes.forEach(i -> {
+            Party key = i.getParty();
+            int value = partyMap.containsKey(key) ? partyMap.get(key) : 0;
+            partyMap.put(key, value + i.getNumberOfVotes());
+        });
+        return partyMap;
+    }
+
+    private String printPartyStatistic(Map.Entry<Party, Integer> partyData) {
+        String partyName = partyData.getKey().getPartyName();
+        double percent = partyData.getValue() * 100.0 / totalNumberOfVoters() ;
+        return String.format("%n   - %s: %4.2f%%", partyName, percent);
+    }
 
 }
