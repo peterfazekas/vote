@@ -9,19 +9,20 @@ import hu.vote.service.VoteService;
 /**
  * @author Peter_Fazekas on 2017.04.17..
  */
-public class App {
+class App {
 
+    private static final int POPULATION = 12345;
+
+    private static final String OUTPUT = "kepviselok.txt";
     private static final String INPUT = "szavazatok.txt";
-    public static final String OUTPUT = "kepviselok.txt";
-
     private final VoteService vote;
     private final Console console;
     private final DataLogger log;
 
-    public App() {
+    private App() {
         console = new Console();
         Data data = new Data();
-        vote = data.createNewInstance(INPUT);
+        vote = data.createNewInstance(INPUT, POPULATION);
         log = new FileDataLogger(OUTPUT);
     }
 

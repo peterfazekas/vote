@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 /**
  * @author Peter_Fazekas on 2017.04.17..
  */
-public class FileDataReader implements DataRead{
+public class FileDataReader implements DataRead {
 
     private static final String PATH = "src\\main\\resources\\";
 

@@ -14,11 +14,11 @@ import java.util.List;
  */
 public class Data {
 
-    public VoteService createNewInstance(final String fileName) {
-        return new VoteService(getData(fileName));
+    public VoteService createNewInstance(final String fileName, final int population) {
+        return new VoteService(getData(fileName), population);
     }
 
-    private List<Vote> getData(final String fileName){
+    private List<Vote> getData(final String fileName) {
         DataRead file = new FileDataReader();
         DataParser data = new DataParser();
         return data.parse(file.read(fileName));

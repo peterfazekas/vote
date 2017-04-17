@@ -23,8 +23,8 @@ public enum Party {
 
     public static Party fromString(final String name) {
         Party thisParty = null;
-        for(Party party : Party.values()) {
-            if(name.equals(party.inputName)) {
+        for (Party party : Party.values()) {
+            if (name.equals(party.inputName)) {
                 thisParty = party;
             }
         }

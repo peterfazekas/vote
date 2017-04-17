@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
  */
 public class DataParser {
 
-    public static final String SEPARATOR = " ";
+    private static final String SEPARATOR = " ";
 
     public List<Vote> parse(final List<String> lines) {
         return lines.stream()
