@@ -102,7 +102,7 @@ public class VoteService {
     private String printPartyStatistic(final Map.Entry<Party, Integer> partyData) {
         String partyName = partyData.getKey().getPartyName();
         double percent = partyData.getValue() * 100.0 / totalNumberOfVoters();
-        return String.format("%n   - %s: %4.2f%%", partyName, percent);
+        return String.format("%n   - %s= %4.2f%%", partyName, percent);
     }
 
     /**
