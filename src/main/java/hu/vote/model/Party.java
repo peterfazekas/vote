@@ -9,7 +9,7 @@ public enum Party {
     HEP("Húsevők Pártja", "HEP", "HEP"),
     TISZ("Tejivók Szövetsége", "TISZ", "TISZ"),
     ZEP("Zöldségevők Pártja", "ZEP", "ZEP"),
-    FJ("Független jelöltek", "-", "független!");
+    FJ("Független jelöltek", "-", "független");
 
     private final String partyName;
     private final String inputName;

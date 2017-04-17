@@ -3,10 +3,8 @@ package hu.vote.service;
 import hu.vote.model.Party;
 import hu.vote.model.Vote;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Peter_Fazekas on 2017.04.17..
@@ -94,10 +92,87 @@ public class VoteService {
         return partyMap;
     }
 
-    private String printPartyStatistic(Map.Entry<Party, Integer> partyData) {
+    private String printPartyStatistic(final Map.Entry<Party, Integer> partyData) {
         String partyName = partyData.getKey().getPartyName();
         double percent = partyData.getValue() * 100.0 / totalNumberOfVoters() ;
         return String.format("%n   - %s: %4.2f%%", partyName, percent);
+    }
+
+    /**
+     * 6. feladat: Melyik jelölt kapta a legtöbb szavazatot? Jelenítse meg a képernyőn a képviselő vezeték és
+     * utónevét, valamint az őt támogató párt rövidítését, vagy azt, hogy független! Ha több ilyen képviselő
+     * is van, akkor mindegyik adatai jelenjenek meg!
+     * @return - A megfelelő válasz.
+     */
+    public String getMostPopularCandidates() {
+        StringBuilder sb = new StringBuilder();
+        getMostPopularCandidateList().stream()
+                .map(this::printMostPopularCandidateList)
+                .forEach(sb::append);
+        return sb.toString();
+    }
+
+    private String printMostPopularCandidateList(final Vote vote) {
+        return String.format("%n   - %s - %s", vote.getName(), vote.getParty().getShortName());
+    }
+
+    private List<Vote> getMostPopularCandidateList() {
+        return votes.stream()
+                .filter(i-> i.getNumberOfVotes() == getMaximumNumberOfVotes())
+                .collect(Collectors.toList());
+    }
+
+    private int getMaximumNumberOfVotes() {
+        return votes.stream()
+                .mapToInt(i-> i.getNumberOfVotes())
+                .max()
+                .getAsInt();
+    }
+
+
+    /**
+     * 7. feladat: Határozza meg, hogy az egyes választókerületekben kik lettek a képviselők! Írja ki
+     * a választókerület sorszámát, a győztes vezeték- és utónevét, valamint az őt támogató párt rövidítését,
+     * vagy azt, hogy független egy-egy szóközzel elválasztva a kepviselok.txt nevű szöveges fájlba!
+     * Az adatok a választókerületek száma szerinti sorrendben jelenjenek meg!
+     * Minden sorba egy képviselő adatai kerüljenek!
+     * @return - A megfelelő válasz.
+     */
+    public String getRepresentatives() {
+        StringBuilder sb = new StringBuilder();
+        Representatives().entrySet().stream().map(this::printRepresentative).forEach(sb::append);
+        return sb.toString();
+    }
+
+    private String printRepresentative(final Map.Entry<Integer, Vote> representativeData) {
+        Vote representative = representativeData.getValue();
+        return String.format("%d %s %s%n", representative.getConstituency(), representative.getName(),
+                representative.getParty().getShortName());
+    }
+
+    private Map<Integer, Vote> Representatives() {
+        Map<Integer, Vote> winnerMap = new TreeMap<>();
+        int max = getMaximumNumberOfConstituency();
+        for (int i = 1; i <= max ; i++) {
+            Vote value = getRepresentativeByConstituency(i);
+            winnerMap.put(i, value);
+        }
+        return winnerMap;
+    }
+
+    private Vote getRepresentativeByConstituency(int constituency) {
+        return votes.stream()
+                .filter(i -> i.getConstituency() == constituency)
+                .sorted((f1, f2) -> Long.compare(f2.getNumberOfVotes(), f1.getNumberOfVotes()))
+                .findFirst()
+                .get();
+    }
+
+    private int getMaximumNumberOfConstituency() {
+        return votes.stream()
+                .mapToInt(i-> i.getConstituency())
+                .max()
+                .getAsInt();
     }
 
 }
